@@ -26,13 +26,14 @@ connectDB()
 
 const app = express()
 app.use(express.static(path.resolve(__dirname, 'static')))
+app.use(express.json())
 app.use(requestTime)
 
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'static/index.html'))
 })
 
-app.get('/api/auth', router)
+app.use('/api/auth', router)
 
 app.get('/feature', (req, res) => {
   console.log('time', (req as any).requestTime)
