@@ -21,6 +21,7 @@ router.post(
           errors: errors.array(),
           message: 'Invalid registration data',
         })
+        return
       }
       const { email, password } = req.body
       const cand = await User.findOne({ email })
