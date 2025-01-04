@@ -1,21 +1,21 @@
 import express from 'express'
+import mongoose from 'mongoose'
 import * as path from 'node:path'
 import { requestTime } from './middleware/middleware1.js'
-import mongoose from 'mongoose'
-import { router } from './routes/auth.route.js'
+import { router as authRoute } from './routes/auth.route.js'
+import { router as linkRoute } from './routes/link.route.js'
 
 const __dirname = path.resolve()
 const PORT = process.env.PORT || 3000
 
-const BASE_URI = process.env.BASE_URI
-if (!BASE_URI) {
-  throw new Error('BASE_URI is not defined')
+const MONGODB_URI = process.env.MONGODB_URI
+if (!MONGODB_URI) {
+  throw new Error('MONGODB_URI is not defined')
 }
 
 async function connectDB() {
   try {
-    await mongoose.connect(BASE_URI!)
-    // await mongoose.connect('mongodb://localhost:27017/test');
+    await mongoose.connect(MONGODB_URI!)
     console.log('MongoDB connected')
   } catch (error) {
     console.log('MongoDB connection error', error)
@@ -33,7 +33,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'static/index.html'))
 })
 
-app.use('/api/auth', router)
+app.use('/api/auth', authRoute)
+app.use('/api/link', linkRoute)
 
 app.get('/feature', (req, res) => {
   console.log('time', (req as any).requestTime)
