@@ -9,14 +9,14 @@ router.post('/generate', authMiddleware, async (req, res) => {
   try {
     const baseUrl = process.env.BASE_URL
     const { from } = req.body
-    const id = nanoid()
+    const code = nanoid()
     const existing = await Link.findOne({ from })
     if (existing) {
       res.json({ link: existing })
       return
     }
-    const to = `${baseUrl}/t/${id}`
-    const link = new Link({ id, to, from, owner: req.user.id })
+    const to = `${baseUrl}/t/${code}`
+    const link = new Link({ code, to, from, owner: req.user.id })
     await link.save()
     res.status(201).json({ link })
   } catch (e) {
@@ -36,8 +36,11 @@ router.get('/', authMiddleware, async (req: Request, res: Response) => {
 })
 
 router.get('/:id', authMiddleware, async (req, res) => {
+  console.log('get id = ', req.params.id)
   try {
     const link = await Link.findById(req.params.id)
+    console.log('link = ', link)
+    res.json(link)
   } catch (e) {
     res.status(500).json({ message: 'Something went wrong' })
     console.error('get id = ', req.params.id, e)

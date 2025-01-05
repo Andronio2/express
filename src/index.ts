@@ -4,6 +4,7 @@ import * as path from 'node:path'
 import { requestTime } from './middleware/middleware1.js'
 import { router as authRoute } from './routes/auth.route.js'
 import { router as linkRoute } from './routes/link.route.js'
+import { router as redirectRoute } from './routes/redirect.route.js'
 
 const __dirname = path.resolve()
 const PORT = process.env.PORT || 3000
@@ -35,6 +36,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoute)
 app.use('/api/link', linkRoute)
+app.use('/t', redirectRoute)
 
 app.get('/feature', (req, res) => {
   console.log('time', (req as any).requestTime)
